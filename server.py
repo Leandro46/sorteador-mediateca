@@ -119,7 +119,13 @@ async def lifespan(app: FastAPI):
     _pw      = await async_playwright().start()
     launch_kw: dict = {
         "headless": True,
-        "args": ["--no-sandbox", "--disable-blink-features=AutomationControlled"],
+        "args": [
+            "--no-sandbox",
+            "--disable-blink-features=AutomationControlled",
+            "--disable-dev-shm-usage",   # evita crash en contenedores con /dev/shm limitado
+            "--disable-gpu",
+            "--single-process",
+        ],
     }
     if not _IS_CLOUD:
         launch_kw["channel"] = "chrome"   # Windows local: usa Chrome del sistema
