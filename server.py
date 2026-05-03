@@ -104,7 +104,7 @@ async ([mediaId, maxComments]) => {
         minId = data.next_min_id;
         pages++;
 
-        await new Promise(r => setTimeout(r, 900));
+        await new Promise(r => setTimeout(r, 500));
     }
 
     return comments;
@@ -122,9 +122,10 @@ async def lifespan(app: FastAPI):
         "args": [
             "--no-sandbox",
             "--disable-blink-features=AutomationControlled",
-            "--disable-dev-shm-usage",   # evita crash en contenedores con /dev/shm limitado
+            "--disable-dev-shm-usage",
             "--disable-gpu",
-            "--single-process",
+            "--disable-setuid-sandbox",
+            "--no-zygote",
         ],
     }
     if not _IS_CLOUD:
@@ -203,8 +204,8 @@ async def fetch_comments(req: FetchReq):
     page = await _ctx.new_page()
     try:
         # La pagina debe estar en instagram.com para que el fetch tenga cookies
-        await page.goto("https://www.instagram.com/", wait_until="domcontentloaded", timeout=25_000)
-        await page.wait_for_timeout(1000)
+        await page.goto("https://www.instagram.com/", wait_until="domcontentloaded", timeout=20_000)
+        await page.wait_for_timeout(500)
 
         comments = await page.evaluate(_FETCH_JS, [media_id, req.max_comments])
 
