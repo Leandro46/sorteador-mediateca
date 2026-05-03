@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sorteador Mediateca · Instagram</title>
+<style>
+:root {
+  --brown:      #6b5b49;
+  --brown-dark: #463729;
+  --brown-soft: #8a7b66;
+  --cream:      #f7f2ec;
+  --card:       #fffdfb;
+  --line:       #e4d9ce;
+  --text:       #514538;
+  --muted:      #8b8178;
+  --gold:       #d8c5ad;
+  --shadow:     0 18px 45px rgba(62,48,36,.18);
+  --radius:     18px;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+body{
+  font-family:"Segoe UI",Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(107,91,73,.15), transparent 32%),
+    linear-gradient(180deg,#f8f4ef 0%,#fffaf5 100%);
+  min-height:100vh;
+  padding-top:52px;
+}
+
+/* ── HERO ────────────────────────────────────────────────────────────── */
+.hero{
+  min-height:390px;
+  padding:36px 24px 120px;
+  text-align:center;
+  color:white;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(rgba(38,30,24,.46),rgba(38,30,24,.48)),
+    radial-gradient(circle at 15% 20%,rgba(255,255,255,.12),transparent 18%),
+    linear-gradient(135deg,#2c2119 0%,#6b5b49 45%,#d7cabd 100%);
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 15% 15%,rgba(245,236,226,.25),transparent 22%),
+    radial-gradient(ellipse at 80% 18%,rgba(255,255,255,.18),transparent 18%),
+    repeating-linear-gradient(115deg,rgba(255,255,255,.055) 0 2px,transparent 2px 8px);
+  opacity:.65;
+}
+.hero::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:130px;
+  background:linear-gradient(180deg,transparent,#f8f4ef);
+}
+.hero-inner{position:relative;z-index:2;max-width:900px;margin:auto;}
+
+.logo-ring{
+  width:112px;height:112px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.85);
+  box-shadow:0 14px 32px rgba(0,0,0,.28);
+  background:var(--brown);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:46px;font-family:Georgia,serif;color:rgba(255,255,255,.9);
+  font-weight:400;letter-spacing:2px;
+  overflow:hidden;
+}
+.logo-ring img{
+  width:100%;height:100%;object-fit:cover;border-radius:50%;
+  display:block;
+}
+
+/* ── WELCOME MODAL ───────────────────────────────────────────────────── */
+#welcomeOverlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(20,12,6,.72);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  backdrop-filter:blur(4px);
+}
+#welcomeModal{
+  background:#fffdfb;
+  border-radius:22px;
+  max-width:460px;width:100%;
+  overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,.45);
+  animation:wm-in .38s cubic-bezier(.22,.68,0,1.18);
+}
+@keyframes wm-in{
+  from{transform:scale(.82) translateY(20px);opacity:0;}
+  to  {transform:scale(1)   translateY(0);   opacity:1;}
+}
+.wm-header{
+  background:linear-gradient(135deg,#1a1210 0%,#2e1e14 60%,#3b2416 100%);
+  padding:22px 28px 18px;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+}
+.wm-logos{
+  display:flex;align-items:center;justify-content:center;gap:18px;
+}
+.wm-mostadata{
+  height:30px;width:auto;object-fit:contain;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,.4));
+}
+.wm-sep{
+  width:1px;height:32px;
+  background:rgba(255,255,255,.18);
+}
+.wm-med-ring{
+  width:46px;height:46px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.7);
+  background:var(--brown);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.wm-med-ring img{
+  width:100%;height:100%;object-fit:cover;border-radius:50%;
+}
+.wm-med-ring .wm-med-fallback{
+  font-size:18px;font-family:Georgia,serif;
+  color:rgba(255,255,255,.9);font-weight:400;
+}
+.wm-body{
+  padding:26px 28px 28px;
+  text-align:center;
+}
+.wm-title{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:20px;font-weight:400;
+  color:var(--brown-dark);
+  line-height:1.3;margin-bottom:14px;
+}
+.wm-text{
+  font-size:14px;line-height:1.65;color:var(--text);
+  margin-bottom:18px;
+}
+.wm-alias{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,#e8f4fd,#d0eaff);
+  border:1px solid rgba(0,120,200,.2);
+  border-radius:10px;padding:10px 18px;
+  font-size:13px;font-weight:700;color:#1565c0;
+  letter-spacing:.3px;margin-bottom:8px;
+}
+.wm-alias .mp-icon{ font-size:18px; }
+.wm-client{
+  font-size:11.5px;color:var(--muted);margin-bottom:20px;
+}
+.wm-client a{
+  color:var(--brown-soft);text-decoration:none;font-weight:600;
+}
+.wm-client a:hover{ color:var(--brown); }
+.wm-btn{
+  width:100%;padding:14px;border-radius:12px;
+  background:linear-gradient(135deg,var(--brown-dark),var(--brown));
+  color:white;font-size:15px;font-weight:800;
+  letter-spacing:.5px;cursor:pointer;border:0;
+  box-shadow:0 6px 18px rgba(70,55,41,.35);
+  transition:.18s;
+}
+.wm-btn:hover{ filter:brightness(1.1);transform:translateY(-1px); }
+.hero h1{
+  margin:22px 0 0;
+  font-family:Georgia,"Times New Roman",serif;
+  letter-spacing:14px;font-size:48px;font-weight:400;
+}
+.hero .script{
+  margin-top:-6px;
+  font-family:"Brush Script MT","Segoe Script",cursive;
+  font-size:44px;font-weight:400;
+}
+.hero p.sub{margin:10px 0 0;font-size:18px;opacity:.9;letter-spacing:.4px;}
+
+/* ── APP SHELL ───────────────────────────────────────────────────────── */
+.app{
+  max-width:860px;
+  margin:-100px auto 48px;
+  padding:0 20px;
+  position:relative;z-index:5;
+  display:flex;flex-direction:column;gap:20px;
+}
+
+.card{
+  background:rgba(255,253,251,.95);
+  border:1px solid rgba(108,91,73,.12);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:26px 28px;
+  backdrop-filter:blur(8px);
+}
+.card.hidden{ display:none; }
+
+.section-title{
+  font-size:13px;letter-spacing:1.4px;color:#5e5145;
+  font-weight:800;text-transform:uppercase;margin-bottom:14px;
+}
+.hint{color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.5;}
+
+/* ── URL INPUT ───────────────────────────────────────────────────────── */
+.input-row{
+  display:grid;grid-template-columns:62px 1fr 52px;
+  border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:white;
+}
+.icon-box{
+  display:flex;align-items:center;justify-content:center;
+  border-right:1px solid var(--line);font-size:28px;color:#b66455;
+}
+#linkPost{
+  border:0;outline:0;font-size:15px;color:var(--text);
+  background:white;padding:0 16px;font-family:inherit;width:100%;
+}
+.clear-btn{
+  border:0;background:transparent;color:var(--muted);font-size:20px;
+  cursor:pointer;transition:.15s;
+}
+.clear-btn:hover{color:var(--brown);}
+
+/* ── BUTTONS ─────────────────────────────────────────────────────────── */
+button{
+  border:0;border-radius:10px;padding:14px 20px;font-weight:800;
+  letter-spacing:.5px;text-transform:uppercase;cursor:pointer;
+  font-size:13px;transition:.18s ease;font-family:inherit;
+}
+button:hover:not(:disabled){transform:translateY(-1px);filter:brightness(.97);}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+
+.btn-primary{background:linear-gradient(135deg,var(--brown),var(--brown-dark));color:white;}
+.btn-light{background:#fbf8f5;border:1px solid #d8c9bb;color:var(--brown);}
+.btn-full{width:100%;margin-top:14px;padding:16px;}
+.btn-big{font-size:16px;padding:18px;}
+
+/* ── LOADING ─────────────────────────────────────────────────────────── */
+.loading-box{
+  display:none;align-items:center;gap:14px;
+  margin-top:16px;padding:16px 18px;
+  background:#fdf9f6;border:1px solid var(--line);border-radius:12px;
+  color:var(--muted);font-size:14px;
+}
+.spinner{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  border:3px solid var(--line);border-top-color:var(--brown);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── ERROR ───────────────────────────────────────────────────────────── */
+.error-box{
+  display:none;margin-top:14px;padding:14px 18px;
+  background:#fff5f4;border:1px solid #f0c4be;border-radius:12px;
+  color:#8b3b30;font-size:14px;line-height:1.5;
+}
+
+/* ── STATUS CHIP ─────────────────────────────────────────────────────── */
+.status-chip{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--muted);margin-top:10px;
+}
+.dot{width:8px;height:8px;border-radius:50%;background:#ccc;flex-shrink:0;}
+.dot.green{background:#5cb85c;}
+.dot.yellow{background:#f0ad4e;}
+.dot.red{background:#d9534f;}
+
+/* ── STATS ───────────────────────────────────────────────────────────── */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;
+}
+.stat-box{
+  text-align:center;padding:14px 10px;
+  background:#fdf8f4;border:1px solid var(--line);border-radius:12px;
+}
+.stat-num{font-size:32px;font-weight:900;color:var(--brown);line-height:1.1;}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-top:4px;}
+
+.participant-list{
+  max-height:220px;overflow-y:auto;
+  border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;background:rgba(255,255,255,.6);
+  font-size:13px;color:#6c6158;line-height:1.7;
+  white-space:pre-wrap;
+}
+
+/* ── FILTERS ─────────────────────────────────────────────────────────── */
+.filter-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;
+}
+.filter-field label{
+  display:block;font-size:12px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.8px;color:#5e5145;margin-bottom:6px;
+}
+.filter-field input,
+.filter-field textarea{
+  width:100%;border:1.5px solid var(--line);border-radius:10px;
+  padding:10px 14px;font-size:14px;color:var(--text);font-family:inherit;
+  background:white;outline:none;transition:.15s;
+}
+.filter-field input:focus,
+.filter-field textarea:focus{ border-color:var(--brown-soft); }
+.filter-field textarea{min-height:90px;resize:vertical;}
+.filter-note{font-size:12px;color:var(--muted);margin-top:6px;}
+
+/* ── RAFFLE / WINNERS ────────────────────────────────────────────────── */
+.winners-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px;
+}
+.winner-slot{
+  text-align:center;padding:18px 12px;
+  border:2px solid var(--line);border-radius:16px;
+  background:rgba(255,255,255,.55);
+  transition:border-color .3s, background .3s;
+  min-height:110px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:6px;
+}
+.winner-slot.filled{
+  background:#fffdf7;border-color:var(--gold);
+  box-shadow:0 6px 20px rgba(107,91,73,.12);
+}
+.winner-slot .medal{font-size:32px;line-height:1;}
+.winner-slot .place{
+  font-size:11px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.9px;color:var(--muted);
+}
+.winner-slot .name{
+  font-size:17px;font-weight:900;color:var(--brown-dark);
+  word-break:break-all;opacity:0;transition:opacity .5s;
+}
+.winner-slot.filled .name{opacity:1;}
+.winner-slot .comment{
+  font-size:12px;color:var(--muted);font-style:italic;
+  line-height:1.4;word-break:break-word;margin-top:6px;
+  max-height:60px;overflow:hidden;
+  opacity:0;transition:opacity .5s .25s;
+}
+.winner-slot.filled .comment{opacity:1;}
+
+/* slot machine roll animation */
+@keyframes roll{
+  0%  {transform:translateY(-8px);opacity:0;}
+  60% {transform:translateY(3px);}
+  100%{transform:translateY(0);opacity:1;}
+}
+.winner-slot.rolling .name{
+  animation:roll .55s cubic-bezier(.22,.68,0,1.2) forwards;
+}
+
+.result-actions{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;justify-content:center;
+}
+
+/* ── HISTORY ─────────────────────────────────────────────────────────── */
+.history-item{
+  padding:14px 18px;border:1px solid var(--line);border-radius:12px;
+  margin-bottom:10px;background:rgba(255,255,255,.55);
+  font-size:13px;line-height:1.7;
+}
+.history-item strong{color:var(--brown-dark);}
+.history-item .date{font-size:11px;color:var(--muted);float:right;}
+.history-empty{
+  text-align:center;color:#b6ada6;padding:28px 0;font-size:14px;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────────────── */
+.footer-strip{
+  margin-top:4px;display:grid;grid-template-columns:repeat(3,1fr);
+  background:linear-gradient(90deg,#efe5db,#f8f3ee);
+  border-radius:16px;overflow:hidden;box-shadow:var(--shadow);
+}
+.footer-item{
+  padding:18px 16px;display:flex;gap:12px;align-items:center;
+  border-right:1px solid #ddcec0;
+}
+.footer-item:last-child{border-right:0;}
+.footer-ico{font-size:28px;color:var(--brown);}
+.footer-item strong{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.5px;}
+.footer-item span{display:block;color:var(--muted);font-size:12px;margin-top:2px;}
+
+.copy{text-align:center;color:#8d8278;margin:24px 0 10px;font-family:Georgia,serif;font-size:13px;}
+
+/* ── TOAST ───────────────────────────────────────────────────────────── */
+.toast{
+  position:fixed;right:20px;bottom:20px;padding:13px 18px;
+  border-radius:12px;background:var(--brown-dark);color:white;
+  box-shadow:0 10px 28px rgba(0,0,0,.22);display:none;z-index:100;
+  font-size:14px;max-width:320px;line-height:1.4;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+@media(max-width:660px){
+  .hero h1{font-size:34px;letter-spacing:9px;}
+  .hero .script{font-size:36px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .winners-grid{grid-template-columns:1fr;}
+  .filter-grid{grid-template-columns:1fr;}
+  .footer-strip{grid-template-columns:1fr;}
+  .footer-item{border-right:0;border-bottom:1px solid #ddcec0;}
+  .footer-item:last-child{border-bottom:0;}
+}
+@media(max-width:420px){
+  .hero{min-height:330px;padding-top:22px;}
+  .logo-ring{width:88px;height:88px;font-size:36px;}
+  .hero h1{font-size:27px;letter-spacing:6px;}
+  .app{padding:0 12px;}
+  .card{padding:18px;}
+  .stats-grid{grid-template-columns:1fr;}
+  #topbar .tb-center{ flex-direction:column; gap:2px; }
+  #topbar .tb-links{ font-size:10px; }
+  #topbar .ad-slot{ display:none; }
+}
+
+/* ── TOP BAR ─────────────────────────────────────────────────────────── */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:52px;
+  background:linear-gradient(135deg,#1a1210 0%,#2e1e14 60%,#3b2416 100%);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  box-shadow:0 2px 12px rgba(0,0,0,.45);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;gap:12px;
+}
+
+/* ad slots — hidden until activated */
+.ad-slot{
+  flex:0 0 auto;width:200px;height:40px;
+  border:1px dashed rgba(255,255,255,.12);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:rgba(255,255,255,.2);letter-spacing:.5px;
+  text-transform:uppercase;pointer-events:none;
+  user-select:none;
+}
+
+.tb-center{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  gap:20px;min-width:0;
+}
+
+.tb-logo{
+  height:28px;width:auto;object-fit:contain;flex-shrink:0;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));
+}
+
+.tb-links{
+  display:flex;align-items:center;gap:12px;
+  font-size:11.5px;white-space:nowrap;
+}
+.tb-links a{
+  color:rgba(255,255,255,.78);text-decoration:none;
+  display:flex;align-items:center;gap:5px;
+  transition:color .15s;
+}
+.tb-links a:hover{ color:#fff; }
+.tb-links .sep{
+  color:rgba(255,255,255,.2);font-size:14px;
+}
+.tb-links .ig-icon-img{
+  width:15px;height:15px;border-radius:3px;
+  flex-shrink:0;vertical-align:middle;
+}
+
+/* ── WINNER COUNT PICKER ─────────────────────────────────────────────── */
+.winner-count-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:10px;margin-bottom:18px;
+}
+.winner-count-row label{
+  font-size:13px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--brown);
+}
+.count-btns{display:flex;gap:6px;}
+.count-btn{
+  width:44px;height:44px;border-radius:10px;
+  border:2px solid var(--line);background:white;
+  font-size:16px;font-weight:800;color:var(--muted);
+  cursor:pointer;transition:.15s;
+}
+.count-btn.active{
+  border-color:var(--brown);background:var(--brown);color:white;
+}
+.tb-links .mp-badge{
+  background:rgba(0,158,222,.22);border:1px solid rgba(0,158,222,.4);
+  border-radius:4px;padding:1px 6px;font-size:10px;
+  color:rgba(160,220,255,.9);letter-spacing:.3px;
+}
+.tb-links .client-tag{
+  color:rgba(255,255,255,.45);font-size:10px;letter-spacing:.4px;
+  text-transform:uppercase;
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOP BAR ──────────────────────────────────────────────────────────── -->
+<div id="topbar">
+  <div class="ad-slot ad-left">AD</div>
+
+  <div class="tb-center">
+    <a href="https://www.instagram.com/mostadata" target="_blank" rel="noopener">
+      <img src="mostadata-logo.png" alt="MostaData" class="tb-logo"/>
+    </a>
+    <div class="tb-links">
+      <a href="https://www.instagram.com/mostadata" target="_blank" rel="noopener">
+        <img src="Instagram_icon.png" class="ig-icon-img" alt="IG"/>@mostadata
+      </a>
+      <span class="sep">·</span>
+      <span class="mp-badge">MP: mostadata</span>
+      <span class="sep">·</span>
+      <span class="client-tag">cliente</span>
+      <a href="https://www.instagram.com/mediateca.viedma" target="_blank" rel="noopener">
+        <img src="Instagram_icon.png" class="ig-icon-img" alt="IG"/>@mediateca.viedma
+      </a>
+    </div>
+  </div>
+
+  <div class="ad-slot ad-right">AD</div>
+</div>
+
+<!-- ── WELCOME MODAL ────────────────────────────────────────────────────── -->
+<div id="welcomeOverlay">
+  <div id="welcomeModal">
+
+    <div class="wm-header">
+      <div class="wm-logos">
+        <img src="mostadata-logo.png" class="wm-mostadata" alt="MostaData"/>
+        <div class="wm-sep"></div>
+        <div class="wm-med-ring">
+          <img src="mediateca-logo.png" alt="Mediateca"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <span class="wm-med-fallback" style="display:none">M</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="wm-body">
+      <p class="wm-title">Emprendedores ayudando emprendedores 💥</p>
+      <p class="wm-text">
+        Esta app es <strong>100% gratis</strong> para ayudarte a lanzar tus sorteos 🚀<br><br>
+        Si te ahorra tiempo y trabajo, podés apoyar el proyecto con una donación 💸<br>
+        Cada aporte mantiene esto en pie ❤️
+      </p>
+      <div class="wm-alias">
+        <span class="mp-icon">💸</span>
+        Alias Mercado Pago: <strong>mostadata</strong>
+      </div>
+      <p class="wm-client">
+        Desarrollado por <a href="https://www.instagram.com/mostadata" target="_blank" rel="noopener">@mostadata</a>
+        · para <a href="https://www.instagram.com/mediateca.viedma" target="_blank" rel="noopener">@mediateca.viedma</a>
+      </p>
+      <button class="wm-btn" onclick="cerrarBienvenida()">✅ ¡Entendido, usar el sorteador!</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="logo-ring" id="heroLogoRing">
+      <img src="mediateca-logo.png" alt="Mediateca"
+           onerror="this.style.display='none';document.getElementById('heroLogoFallback').style.display='flex'"/>
+      <span id="heroLogoFallback" style="display:none;font-size:46px;font-family:Georgia,serif;color:rgba(255,255,255,.9);">M</span>
+    </div>
+    <h1>MEDIATECA</h1>
+    <p class="script">Sorteador</p>
+    <p class="sub">Sorteos de Instagram · Rápido · Transparente · Gratuito</p>
+  </div>
+</div>
+
+<!-- ── APP ──────────────────────────────────────────────────────────────── -->
+<div class="app">
+
+  <!-- STEP 1 · URL -->
+  <div class="card" id="cardURL">
+    <p class="section-title">📎 Publicación de Instagram</p>
+    <p class="hint">Pegá el link del post o reel y hacé clic en <strong>Cargar comentarios</strong>. El sistema extrae todos los participantes automáticamente.</p>
+
+    <div class="input-row">
+      <div class="icon-box">📷</div>
+      <input id="linkPost" type="url"
+        placeholder="https://www.instagram.com/p/XXXXXXXXX/"
+        onkeydown="if(event.key==='Enter') cargarComentarios()"/>
+      <button class="clear-btn" onclick="limpiarTodo()" title="Limpiar">✕</button>
+    </div>
+
+    <button class="btn-primary btn-full" id="btnFetch" onclick="cargarComentarios()">
+      ⬇ Cargar comentarios
+    </button>
+
+    <div class="loading-box" id="loadingBox">
+      <div class="spinner"></div>
+      <span id="loadingMsg">Conectando con Instagram...</span>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <div class="status-chip" id="statusChip" style="display:none">
+      <div class="dot" id="statusDot"></div>
+      <span id="statusText"></span>
+    </div>
+  </div>
+
+  <!-- STEP 2 · FILTERS (hidden until comments are loaded) -->
+  <div class="card hidden" id="cardFiltros">
+    <p class="section-title">🔧 Filtros</p>
+    <div class="filter-grid">
+      <div class="filter-field">
+        <label>Mín. menciones (@) por comentario</label>
+        <input id="minMenciones" type="number" min="0" max="10" value="0"
+          placeholder="0 = sin filtro"/>
+        <p class="filter-note">Ej: poné 2 si el sorteo requiere etiquetar 2 amigos.</p>
+      </div>
+      <div class="filter-field">
+        <label>Excluir usuarios (uno por línea)</label>
+        <textarea id="excluidos" placeholder="@mediateca&#10;@spam_bot"></textarea>
+        <p class="filter-note">Siempre se excluye el mismo usuario de ganar dos veces.</p>
+      </div>
+    </div>
+    <button class="btn-light" onclick="aplicarFiltros()">↺ Aplicar filtros</button>
+  </div>
+
+  <!-- STEP 3 · PARTICIPANTS (hidden until loaded) -->
+  <div class="card hidden" id="cardParticipantes">
+    <p class="section-title">👥 Participantes</p>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">Comentarios</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statUnicos">0</div>
+        <div class="stat-label">Participantes únicos</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statFiltrados">0</div>
+        <div class="stat-label">Excluidos</div>
+      </div>
+    </div>
+    <div class="participant-list" id="listParticipantes">—</div>
+  </div>
+
+  <!-- STEP 4 · SORTEO (hidden until participants ready) -->
+  <div class="card hidden" id="cardSorteo" style="text-align:center">
+    <p class="section-title">🎲 Sorteo</p>
+
+    <div class="winner-count-row">
+      <label>Ganadores:</label>
+      <div class="count-btns">
+        <button class="count-btn" id="cBtn1" onclick="setGanadores(1)">1</button>
+        <button class="count-btn" id="cBtn2" onclick="setGanadores(2)">2</button>
+        <button class="count-btn active" id="cBtn3" onclick="setGanadores(3)">3</button>
+      </div>
+    </div>
+
+    <button class="btn-primary btn-full btn-big" id="btnSortear" onclick="sortear()">
+      🏆 Sortear 1°, 2° y 3° lugar
+    </button>
+
+    <div class="winners-grid" id="winnersGrid">
+      <div class="winner-slot" id="slot1">
+        <div class="medal">🥇</div>
+        <div class="place">1er Lugar</div>
+        <div class="name" id="winner1">—</div>
+        <div class="comment" id="comment1"></div>
+      </div>
+      <div class="winner-slot" id="slot2">
+        <div class="medal">🥈</div>
+        <div class="place">2do Lugar</div>
+        <div class="name" id="winner2">—</div>
+        <div class="comment" id="comment2"></div>
+      </div>
+      <div class="winner-slot" id="slot3">
+        <div class="medal">🥉</div>
+        <div class="place">3er Lugar</div>
+        <div class="name" id="winner3">—</div>
+        <div class="comment" id="comment3"></div>
+      </div>
+    </div>
+
+    <div class="result-actions" id="resultActions" style="display:none">
+      <button class="btn-light" onclick="copiarResultado()">📋 Copiar resultado</button>
+      <button class="btn-light" onclick="nuevoSorteo()">🔄 Nuevo sorteo</button>
+    </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="card hidden" id="cardHistorial">
+    <p class="section-title">📜 Historial de sorteos</p>
+    <div id="historialList"><div class="history-empty">Aún no hay sorteos realizados.</div></div>
+  </div>
+
+  <!-- FOOTER INFO -->
+  <div class="footer-strip">
+    <div class="footer-item">
+      <div class="footer-ico">🔒</div>
+      <div>
+        <strong>Seguro</strong>
+        <span>No almacenamos tus datos ni contraseñas.</span>
+      </div>
+    </div>
+    <div class="footer-item">
+      <div class="footer-ico">🎯</div>
+      <div>
+        <strong>Imparcial</strong>
+        <span>Selección aleatoria criptográficamente uniforme.</span>
+      </div>
+    </div>
+    <div class="footer-item">
+      <div class="footer-ico">✅</div>
+      <div>
+        <strong>Gratuito</strong>
+        <span>100% open source. Sin pagos, sin límites.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="copy">Mediateca · Sorteador de Instagram · Open Source</p>
+
+<div id="toast" class="toast"></div>
+
+<!-- ── SCRIPT ────────────────────────────────────────────────────────────── -->
+<script>
+'use strict';
+
+// ── Welcome modal ──────────────────────────────────────────────────────────
+function cerrarBienvenida(){
+  const overlay = document.getElementById('welcomeOverlay');
+  overlay.style.transition = 'opacity .25s';
+  overlay.style.opacity = '0';
+  setTimeout(() => overlay.style.display = 'none', 260);
+}
+
+// ── State ──────────────────────────────────────────────────────────────────
+let rawComments   = [];   // [{username, text, ts}] from backend
+let participantes = [];   // unique usernames after filters
+let drawHistory   = [];   // saved draws
+let currentDraw   = null; // {gold, silver, bronze}
+let isDrawn       = false;
+let ganadores     = 3;    // 1 | 2 | 3
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+function $(id){ return document.getElementById(id); }
+
+function show(id){ $(id).classList.remove('hidden'); $(id).style.display=''; }
+function hide(id){ $(id).classList.add('hidden'); }
+
+function toast(msg, ms = 3200){
+  const t = $('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.style.display = 'none', ms);
+}
+
+function setLoading(on, msg = 'Cargando comentarios...'){
+  const box = $('loadingBox');
+  box.style.display = on ? 'flex' : 'none';
+  $('loadingMsg').textContent = msg;
+  $('btnFetch').disabled = on;
+}
+
+function showError(msg){
+  const box = $('errorBox');
+  box.textContent = '❌ ' + msg;
+  box.style.display = 'block';
+}
+function clearError(){ $('errorBox').style.display = 'none'; }
+
+function setStatus(dot, text){
+  $('statusChip').style.display = 'flex';
+  $('statusDot').className = 'dot ' + dot;
+  $('statusText').textContent = text;
+}
+
+function isValidUrl(url){
+  return /instagram\.com\/(p|reel|reels|tv)\/[A-Za-z0-9_-]+/.test(url);
+}
+
+// ── Backend health check ────────────────────────────────────────────────────
+(async function checkHealth(){
+  try {
+    const r = await fetch('/api/health', { signal: AbortSignal.timeout(4000) });
+    const d = await r.json();
+    if (d.ok && d.session_ready && d.browser_ready){
+      setStatus('green', 'Sistema listo · pegá el link y cargá los comentarios');
+    } else if (d.ok && !d.session_ready){
+      setStatus('yellow', 'Sesión no configurada · ejecutá setup_session.py una vez');
+    } else {
+      setStatus('yellow', 'Backend activo · inicializando navegador...');
+    }
+  } catch {
+    setStatus('red', 'Servidor no disponible · ejecutá start.bat para iniciar');
+  }
+})();
+
+// ── STEP 1 · Fetch comments ─────────────────────────────────────────────────
+async function cargarComentarios(){
+  clearError();
+  const url = $('linkPost').value.trim();
+
+  if (!url){
+    showError('Pegá el link de la publicación de Instagram.');
+    return;
+  }
+  if (!isValidUrl(url)){
+    showError('El link no parece ser una publicación de Instagram válida.\nEjemplo: https://www.instagram.com/p/XXXXXXXXX/');
+    return;
+  }
+
+  setLoading(true, 'Conectando con Instagram...');
+  hide('cardFiltros');
+  hide('cardParticipantes');
+  hide('cardSorteo');
+
+  // Simulate progress messages while waiting
+  const msgs = [
+    'Cargando comentarios...',
+    'Obteniendo comentarios (esto puede tardar 1-2 min en posts con muchos comentarios)...',
+    'Siguiendo paginado de comentarios...',
+    'Casi listo...',
+  ];
+  let mi = 0;
+  const interval = setInterval(() => {
+    mi = (mi + 1) % msgs.length;
+    $('loadingMsg').textContent = msgs[mi];
+  }, 8000);
+
+  try {
+    const res = await fetch('/api/fetch', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, max_comments: 3000 }),
+      signal: AbortSignal.timeout(180_000),
+    });
+
+    clearInterval(interval);
+
+    if (!res.ok){
+      const err = await res.json().catch(() => ({ detail: `HTTP ${res.status}` }));
+      throw new Error(err.detail || `Error del servidor: ${res.status}`);
+    }
+
+    const data = await res.json();
+    rawComments = data.comments || [];
+
+    if (data.partial){
+      toast(`⚠️ Descarga parcial: ${rawComments.length} comentarios (Instagram limitó la carga).`, 6000);
+    }
+
+    aplicarFiltros();
+    show('cardFiltros');
+
+    if (rawComments.length === 0){
+      showError('No se encontraron comentarios en esta publicación.');
+    }
+
+  } catch (err){
+    clearInterval(interval);
+    if (err.name === 'TimeoutError'){
+      showError('La solicitud tardó demasiado. Instagram puede estar lento o la publicación tiene demasiados comentarios. Intentá de nuevo.');
+    } else {
+      showError(err.message);
+    }
+  } finally {
+    setLoading(false);
+  }
+}
+
+// ── STEP 2 · Filters & participant processing ───────────────────────────────
+function aplicarFiltros(){
+  const minM = parseInt($('minMenciones').value || '0', 10);
+  const excl = $('excluidos').value
+    .split('\n')
+    .map(u => u.replace(/^@/, '').trim().toLowerCase())
+    .filter(Boolean);
+
+  const seen  = new Set();
+  const valid = [];
+  let filtered = 0;
+
+  for (const c of rawComments){
+    const u = (c.username || '').toLowerCase().trim();
+    if (!u){ filtered++; continue; }
+    if (excl.includes(u)){ filtered++; continue; }
+    if (seen.has(u)){ filtered++; continue; }  // dedup: primer comentario gana
+
+    const mentions = (c.text.match(/@[a-z0-9._]+/gi) || []).length;
+    if (mentions < minM){ filtered++; continue; }
+
+    seen.add(u);
+    valid.push({ username: u, text: c.text || '' });
+  }
+
+  participantes = valid;
+  isDrawn = false;
+  currentDraw = null;
+  resetSlots();
+
+  $('statTotal').textContent     = rawComments.length;
+  $('statUnicos').textContent    = participantes.length;
+  $('statFiltrados').textContent = filtered;
+
+  if (participantes.length > 0){
+    const preview = participantes.slice(0, 200)
+      .map(p => `@${p.username}: ${p.text.slice(0, 60)}${p.text.length > 60 ? '…' : ''}`)
+      .join('\n');
+    $('listParticipantes').textContent =
+      preview + (participantes.length > 200 ? `\n\n… y ${participantes.length - 200} participantes más.` : '');
+    show('cardParticipantes');
+    show('cardSorteo');
+  } else {
+    $('listParticipantes').textContent = 'Sin participantes con los filtros actuales.';
+    show('cardParticipantes');
+    hide('cardSorteo');
+  }
+}
+
+// ── STEP 3 · Winner count ───────────────────────────────────────────────────
+function setGanadores(n){
+  ganadores = n;
+  [1,2,3].forEach(i => $('cBtn'+i).classList.toggle('active', i === n));
+
+  const labels = { 1:'🏆 Sortear 1er lugar', 2:'🏆 Sortear 1° y 2° lugar', 3:'🏆 Sortear 1°, 2° y 3° lugar' };
+  $('btnSortear').textContent = labels[n];
+
+  const grid = $('winnersGrid');
+  const cols  = { 1:'minmax(0,340px)', 2:'repeat(2,1fr)', 3:'repeat(3,1fr)' };
+  grid.style.gridTemplateColumns = cols[n];
+  grid.style.justifyContent = n === 1 ? 'center' : '';
+
+  $('slot2').style.display = n >= 2 ? '' : 'none';
+  $('slot3').style.display = n >= 3 ? '' : 'none';
+
+  if (isDrawn){ resetSlots(); isDrawn = false; currentDraw = null; }
+}
+
+// ── STEP 3 · Draw ───────────────────────────────────────────────────────────
+function sortear(){
+  if (participantes.length < 1){
+    toast('No hay participantes para sortear.');
+    return;
+  }
+  if (participantes.length < ganadores){
+    toast(`Solo hay ${participantes.length} participante(s). Se sortearán los disponibles.`);
+  }
+
+  $('btnSortear').disabled = true;
+  $('resultActions').style.display = 'none';
+  resetSlots();
+
+  const pool = [...participantes];
+  const pick = () => pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+
+  const gold   = pick();
+  const silver = ganadores >= 2 && pool.length > 0 ? pick() : null;
+  const bronze = ganadores >= 3 && pool.length > 0 ? pick() : null;
+
+  currentDraw = { gold, silver, bronze };
+  isDrawn = true;
+
+  setTimeout(() => revealSlot('slot1', 'winner1', 'comment1', gold),   400);
+  if (silver) setTimeout(() => revealSlot('slot2', 'winner2', 'comment2', silver), 1200);
+  if (bronze) setTimeout(() => revealSlot('slot3', 'winner3', 'comment3', bronze), 2000);
+
+  const totalDelay = ganadores === 1 ? 1400 : ganadores === 2 ? 2200 : 3000;
+  setTimeout(() => {
+    $('btnSortear').disabled = false;
+    $('resultActions').style.display = 'flex';
+    guardarHistorial();
+    show('cardHistorial');
+    renderHistorial();
+  }, totalDelay);
+}
+
+function revealSlot(slotId, nameId, commentId, participant){
+  const slot = $(slotId);
+  $(nameId).textContent    = participant ? '@' + participant.username : '—';
+  $(commentId).textContent = participant ? '"' + participant.text + '"' : '';
+  slot.classList.add('filled', 'rolling');
+  setTimeout(() => slot.classList.remove('rolling'), 600);
+}
+
+function resetSlots(){
+  ['slot1','slot2','slot3'].forEach(id => {
+    $(id).classList.remove('filled','rolling');
+  });
+  $('winner1').textContent  = '—'; $('comment1').textContent = '';
+  $('winner2').textContent  = '—'; $('comment2').textContent = '';
+  $('winner3').textContent  = '—'; $('comment3').textContent = '';
+  $('resultActions').style.display = 'none';
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+function copiarResultado(){
+  if (!currentDraw){ toast('Realizá un sorteo primero.'); return; }
+  const url = $('linkPost').value.trim();
+  const txt = [
+    '🏆 RESULTADO DEL SORTEO',
+    `📎 Post: ${url}`,
+    `📅 Fecha: ${new Date().toLocaleString('es-AR')}`,
+    `👥 Participantes: ${participantes.length}`,
+    '',
+    currentDraw.gold   ? `🥇 1er Lugar: @${currentDraw.gold.username}\n   "${currentDraw.gold.text}"` : '',
+    currentDraw.silver ? `🥈 2do Lugar: @${currentDraw.silver.username}\n   "${currentDraw.silver.text}"` : '',
+    currentDraw.bronze ? `🥉 3er Lugar: @${currentDraw.bronze.username}\n   "${currentDraw.bronze.text}"` : '',
+  ].filter(l => l !== '').join('\n');
+
+  navigator.clipboard.writeText(txt)
+    .then(() => toast('✅ Resultado copiado al portapapeles.'))
+    .catch(() => {
+      prompt('Copiá este texto:', txt);
+    });
+}
+
+
+function nuevoSorteo(){
+  resetSlots();
+  isDrawn = false;
+  currentDraw = null;
+  toast('Listo para un nuevo sorteo con los mismos participantes.');
+}
+
+function limpiarTodo(){
+  $('linkPost').value = '';
+  rawComments = [];
+  participantes = [];
+  currentDraw = null;
+  isDrawn = false;
+  clearError();
+  hide('cardFiltros');
+  hide('cardParticipantes');
+  hide('cardSorteo');
+  $('statusChip').style.display = 'none';
+}
+
+// ── History ────────────────────────────────────────────────────────────────
+function guardarHistorial(){
+  if (!currentDraw) return;
+  drawHistory.unshift({
+    date:   new Date().toLocaleString('es-AR'),
+    url:    $('linkPost').value.trim(),
+    gold:   currentDraw.gold,
+    silver: currentDraw.silver,
+    bronze: currentDraw.bronze,
+    total:  participantes.length,
+  });
+  // gold/silver/bronze son objetos {username, text}
+  if (drawHistory.length > 20) drawHistory.pop();
+}
+
+function renderHistorial(){
+  const list = $('historialList');
+  if (drawHistory.length === 0){
+    list.innerHTML = '<div class="history-empty">Aún no hay sorteos realizados.</div>';
+    return;
+  }
+  const fmt = p => p ? `@${p.username} <em style="color:var(--muted);font-weight:400">"${p.text.slice(0,60)}${p.text.length>60?'…':''}"</em>` : '';
+  list.innerHTML = drawHistory.map((d,i) => `
+    <div class="history-item">
+      <span class="date">${d.date}</span>
+      <strong>Sorteo #${drawHistory.length - i}</strong> · ${d.total} participantes<br>
+      🥇 ${fmt(d.gold)}<br>
+      ${d.silver ? `🥈 ${fmt(d.silver)}<br>` : ''}
+      ${d.bronze ? `🥉 ${fmt(d.bronze)}<br>` : ''}
+      ${d.url ? `<small style="color:var(--muted)">${d.url}</small>` : ''}
+    </div>`).join('');
+}
+</script>
+
+</body>
+</html>

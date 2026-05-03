@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sorteador-mediateca
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: IG_USERNAME
+        sync: false        # lo cargás manualmente en el dashboard de Render
+      - key: IG_PASSWORD
+        sync: false

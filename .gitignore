@@ -1,0 +1,27 @@
+# Credenciales — NUNCA subir al repositorio
+.env
+ig-session.json
+ig-session-*.json
+
+# Entorno virtual Python
+venv/
+.venv/
+env/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs del servidor
+*.log
+
+# Archivos de debug
+debug_*.py
+debug_*.json
+debug_*.html
+debug_json/
+
+# OS
+.DS_Store
+Thumbs.db
