@@ -6,7 +6,7 @@ La tecnica clave: page.evaluate() ejecuta fetch() DENTRO del browser,
 usando las cookies y headers reales de Instagram. No hay scraping de DOM.
 """
 
-import os, re, logging
+import os, re, sys, base64, logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
@@ -21,6 +21,19 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(name)s: %(messa
 log = logging.getLogger("sorteador")
 
 SESSION_FILE = "ig-session.json"
+
+# ── Restaurar sesion desde variable de entorno (deploy en nube) ───────────
+_SESSION_B64 = os.getenv("IG_SESSION_B64", "").strip()
+if _SESSION_B64 and not os.path.exists(SESSION_FILE):
+    try:
+        with open(SESSION_FILE, "wb") as _f:
+            _f.write(base64.b64decode(_SESSION_B64))
+        log.info("Sesion de Instagram restaurada desde IG_SESSION_B64")
+    except Exception as _e:
+        log.error(f"No se pudo restaurar la sesion desde IG_SESSION_B64: {_e}")
+
+# En Linux (nube) no existe Chrome del sistema — usar Chromium de Playwright
+_IS_CLOUD = sys.platform != "win32"
 
 _pw      = None
 _browser: Browser | None        = None
@@ -104,11 +117,13 @@ async def lifespan(app: FastAPI):
     global _pw, _browser, _ctx
 
     _pw      = await async_playwright().start()
-    _browser = await _pw.chromium.launch(
-        headless=True,
-        channel="chrome",
-        args=["--no-sandbox", "--disable-blink-features=AutomationControlled"],
-    )
+    launch_kw: dict = {
+        "headless": True,
+        "args": ["--no-sandbox", "--disable-blink-features=AutomationControlled"],
+    }
+    if not _IS_CLOUD:
+        launch_kw["channel"] = "chrome"   # Windows local: usa Chrome del sistema
+    _browser = await _pw.chromium.launch(**launch_kw)
 
     ctx_kw: dict = {
         "user_agent": (
