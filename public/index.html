@@ -387,27 +387,68 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
   font-size:14px;max-width:320px;line-height:1.4;
 }
 
+/* ── CTA BANNER ──────────────────────────────────────────────────────── */
+#ctaBanner{
+  background:linear-gradient(135deg,#3b2416,#6b5b49);
+  color:rgba(255,255,255,.92);
+  text-align:center;padding:11px 16px;
+  font-size:13.5px;line-height:1.5;
+  display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:6px 14px;
+}
+#ctaBanner .cta-text{ opacity:.88; }
+#ctaBanner .cta-accounts{ display:flex;gap:10px;flex-wrap:wrap;justify-content:center; }
+#ctaBanner a{
+  color:#fff;font-weight:700;text-decoration:none;
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.12);border-radius:20px;
+  padding:3px 10px;transition:.15s;white-space:nowrap;
+}
+#ctaBanner a:hover{ background:rgba(255,255,255,.22); }
+#ctaBanner .cta-ig{ width:14px;height:14px;border-radius:3px;vertical-align:middle; }
+
 /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
 @media(max-width:660px){
   .hero h1{font-size:34px;letter-spacing:9px;}
   .hero .script{font-size:36px;}
   .stats-grid{grid-template-columns:1fr 1fr;}
-  .winners-grid{grid-template-columns:1fr;}
+  .winners-grid{grid-template-columns:1fr !important;}
   .filter-grid{grid-template-columns:1fr;}
   .footer-strip{grid-template-columns:1fr;}
   .footer-item{border-right:0;border-bottom:1px solid #ddcec0;}
   .footer-item:last-child{border-bottom:0;}
+  .result-actions{flex-wrap:wrap;}
+  #ctaBanner{font-size:12.5px;padding:9px 12px;}
 }
-@media(max-width:420px){
-  .hero{min-height:330px;padding-top:22px;}
-  .logo-ring{width:88px;height:88px;font-size:36px;}
-  .hero h1{font-size:27px;letter-spacing:6px;}
-  .app{padding:0 12px;}
-  .card{padding:18px;}
+@media(max-width:480px){
+  body{padding-top:48px;}
+  #topbar{height:48px;padding:0 10px;}
+  .tb-logo{height:22px;}
+  .ad-slot{display:none !important;}
+  .tb-links .sep{display:none;}
+  .tb-links .mp-badge{display:none;}
+  .tb-links .client-tag{display:none;}
+  .tb-links{gap:8px;font-size:11px;}
+  .tb-links a{padding:2px 6px;background:rgba(255,255,255,.1);border-radius:12px;}
+  .hero{min-height:300px;padding:18px 16px 100px;}
+  .logo-ring{width:80px;height:80px;font-size:32px;}
+  .hero h1{font-size:26px;letter-spacing:5px;margin-top:14px;}
+  .hero .script{font-size:30px;}
+  .hero p.sub{font-size:14px;}
+  .app{padding:0 10px;margin-top:-80px;}
+  .card{padding:16px;}
   .stats-grid{grid-template-columns:1fr;}
-  #topbar .tb-center{ flex-direction:column; gap:2px; }
-  #topbar .tb-links{ font-size:10px; }
-  #topbar .ad-slot{ display:none; }
+  .winner-count-row{flex-wrap:wrap;gap:8px;}
+  .count-btn{width:48px;height:48px;font-size:18px;}
+  #btnSortear{font-size:13px;padding:14px 16px;}
+  .result-actions{flex-direction:column;}
+  .result-actions button{width:100%;}
+  #ctaBanner{font-size:12px;gap:6px 8px;padding:8px 12px;}
+  #ctaBanner .cta-text{width:100%;text-align:center;}
+  /* Modal mobile */
+  #welcomeModal{margin:8px;}
+  .wm-body{padding:20px 18px 22px;}
+  .wm-title{font-size:17px;}
 }
 
 /* ── TOP BAR ─────────────────────────────────────────────────────────── */
@@ -564,6 +605,19 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
     <h1>MEDIATECA</h1>
     <p class="script">Sorteador</p>
     <p class="sub">Sorteos de Instagram · Rápido · Transparente · Gratuito</p>
+  </div>
+</div>
+
+<!-- ── CTA BANNER ────────────────────────────────────────────────────────── -->
+<div id="ctaBanner">
+  <span class="cta-text">🛠️ Seguí las cuentas para más herramientas y cositas lindas ❤️</span>
+  <div class="cta-accounts">
+    <a href="https://www.instagram.com/mostadata" target="_blank" rel="noopener">
+      <img src="Instagram_icon.png" class="cta-ig" alt=""/>@mostadata
+    </a>
+    <a href="https://www.instagram.com/mediateca.viedma" target="_blank" rel="noopener">
+      <img src="Instagram_icon.png" class="cta-ig" alt=""/>@mediateca.viedma
+    </a>
   </div>
 </div>
 
