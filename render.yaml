@@ -1,7 +1,11 @@
 services:
   - type: web
     name: sorteador-mediateca
-    runtime: docker
+    runtime: python
+    buildCommand: pip install -r requirements.txt && playwright install chromium
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
     envVars:
+      - key: PLAYWRIGHT_BROWSERS_PATH
+        value: /opt/render/project/src/.playwright-browsers
       - key: IG_SESSION_B64
         sync: false
