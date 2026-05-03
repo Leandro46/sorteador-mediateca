@@ -886,7 +886,7 @@ async function cargarComentarios(){
     const res = await fetch('/api/fetch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, max_comments: 3000 }),
+      body: JSON.stringify({ url, max_comments: 1000 }),
       signal: AbortSignal.timeout(180_000),
     });
 

@@ -104,7 +104,7 @@ async ([mediaId, maxComments]) => {
         minId = data.next_min_id;
         pages++;
 
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise(r => setTimeout(r, 300));
     }
 
     return comments;
@@ -188,7 +188,7 @@ async def health():
 
 class FetchReq(BaseModel):
     url:          str
-    max_comments: int = 3000
+    max_comments: int = 1000
 
 
 @app.post("/api/fetch")
